@@ -38,83 +38,96 @@ public class Main {
         System.out.print(LL);
     }
 
-    public static void task2() throws IOException {
+    public static void task2() {
         // В калькулятор (урок 1 и 2) добавьте возможность отменить последнюю операцию.
         System.out.println("Введите число: ");
-        Deque array = new ArrayDeque();
+        Deque <String>array = new ArrayDeque<>();
         double sum = 0;
         Boolean isQuit = true;
-//        File log = new File("log.txt");
-//        log.createNewFile();
-//        fileWriter FW = new FileWriter(log, true);
-        while (isQuit == true) {
-            System.out.println("Выбирете действие:" + "\n" +
-                    "1 - Калькулятор" + "\n" +
-                    "2 - Показать предыдущее действие" + "\n" +
-                    "3 - Выход" + "\n");
+
+        while (isQuit) {
+            System.out.println("""
+                    Выбирете действие:
+                    1 - Калькулятор
+                    2 - Показать предыдущее действие
+                    3 - Выход
+                    """);
             while (!sc.hasNextInt()) {
                 sc.next();
             }
-            Integer Ent = sc.nextInt();
+            int Ent = sc.nextInt();
 
-            switch (Ent) {
-                case 1 -> {
-                    System.out.println("Введите число: ");
-                    while (!sc.hasNextDouble()) {
-                        sc.next();
-                    }
-                    double a = sc.nextDouble();
-                    System.out.println("выберите действие: ");
-                    while (!sc.hasNext("[-+/*]")) {
-                        sc.next();
-                    }
-                    String zzz = sc.next();
-                    System.out.println("Введите число: ");
-                    while (!sc.hasNextDouble()) {
-                        sc.next();
-                    }
-                    double b = sc.nextDouble();
+            try {
+                File log = new File("log.txt");
+                FileWriter fileWriter = new FileWriter(log, true);
+                switch (Ent) {
+                    case 1 -> {
+                        System.out.println("Введите число: ");
+                        while (!sc.hasNextDouble()) {
+                            sc.next();
+                        }
+                        double a = sc.nextDouble();
+                        System.out.println("выберите действие: ");
+                        while (!sc.hasNext("[-+/*]")) {
+                            sc.next();
+                        }
+                        String zzz = sc.next();
+                        System.out.println("Введите число: ");
+                        while (!sc.hasNextDouble()) {
+                            sc.next();
+                        }
+                        double b = sc.nextDouble();
 
-                    switch (zzz) {
-                        case "+" -> {
-                            sum = (a + b);
-                            System.out.println(sum);
-                            String str = (a + zzz + b + "=" + sum);
-                            array.push(str);
-                            break;
+                        switch (zzz) {
+                            case "+" -> {
+                                sum = (a + b);
+                                System.out.println(sum);
+                                String str = (a + zzz + b + "=" + sum);
+                                array.push(str);
+                                fileWriter.write(str + '\n');
+                                break;
+                            }
+                            case "-" -> {
+                                sum = (a - b);
+                                System.out.println(sum);
+                                String str = (a + zzz + b + "=" + sum);
+                                array.push(str);
+                                fileWriter.write(str + '\n');
+                                break;
+                            }
+                            case "*" -> {
+                                sum = (a * b);
+                                System.out.println(sum);
+                                String str = (a + zzz + b + "=" + sum);
+                                array.push(str);
+                                fileWriter.write(str + '\n');
+                                break;
+                            }
+                            case "/" -> {
+                                sum = (a / b);
+                                System.out.println(sum);
+                                String str = (a + zzz + b + "=" + sum);
+                                array.push(str);
+                                fileWriter.write(str + '\n');
+                                break;
+                            }
                         }
-                        case "-" -> {
-                            sum = (a - b);
-                            System.out.println(sum);
-                            String str = (a + zzz + b + "=" + sum);
-                            array.push(str);
-                            break;
-                        }
-                        case "*" -> {
-                            sum = (a * b);
-                            System.out.println(sum);
-                            String str = (a + zzz + b + "=" + sum);
-                            array.push(str);
-                            break;
-                        }
-                        case "/" -> {
-                            sum = (a / b);
-                            System.out.println(sum);
-                            String str = (a + zzz + b + "=" + sum);
-                            array.push(str);
-                            break;
-                        }
+                        fileWriter.flush();
+                        fileWriter.close();
+                        System.out.print("\n");
                     }
-                    System.out.print("\n");
+                    case 2 -> {
+                        System.out.print(array.poll() + "\n");
+                        break;
+                    }
+                    case 3 -> {
+                        System.exit(0);
+                    }
+                    default -> task2();
                 }
-                case 2 -> {
-                    System.out.print(array.poll() + "\n");
-                    break;
-                }
-                case 3 -> {
-                    System.exit(0);
-                }
-                default -> task2();
+            }
+            catch (IOException ex){
+
             }
 
         }
